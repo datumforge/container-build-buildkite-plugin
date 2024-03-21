@@ -1,0 +1,29 @@
+version: "3"
+
+tasks:
+  install:
+    desc: install packages required for working with this repo
+    cmds:
+      - brew install shellcheck
+  
+  shellcheck:
+    desc: shellcheck
+    cmds: 
+      - shellcheck hooks/** scripts/**
+
+  lint:
+    desc: runs the buildkite compose linter
+    cmds:
+      - docker compose run --rm lint
+
+  test:
+    desc: runs the buildkite plugin tester
+    cmds:
+      - docker compose run --rm tests
+
+  ci: 
+    desc: runs all the commands that will be run in CI 
+    cmds:
+      - task: shellcheck
+      - task: lint
+      - task: test

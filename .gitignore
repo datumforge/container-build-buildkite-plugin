@@ -1,0 +1,30 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Packages
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs 
+*.log
+
+# Editor files
+.vscode
+
+# OS Generated Files
+.DS_Store*
+.AppleDouble
+.LSOverride
+ehthumbs.db
+Icon?
+Thumbs.db

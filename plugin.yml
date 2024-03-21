@@ -1,0 +1,14 @@
+---
+name: template-buildkite-plugin
+description: what your plugin does
+author: Datum
+requirements:
+  - if you have requirements
+configuration:
+  properties:
+    propertyname:
+      type: string
+  required: []
+    # - if any properties are required
+  dependencies:
+    dependencyname: [dep]
