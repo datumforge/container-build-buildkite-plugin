@@ -13,14 +13,14 @@ export WHICH_STUB_DEBUG=/dev/tty
   export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0="foo/bar:baz"
 
   stub which 'docker : echo /usr/bin/docker'
-  stub buildkite-agent 'annotate --style success "Docker build successful<br />" --context publish --append : echo pushed buildkite agent message'
+  stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
   stub docker 'build --tag foo/bar:baz -f Dockerfile . : echo basic parameters set'
 
   run "$PWD/hooks/post-command"
 
   assert_success
   assert_output --partial "basic parameters set"
-  assert_output --partial "Docker build successful"
+  assert_output --partial "Docker build succeeded"
   assert_output --partial "pushed buildkite agent message"
 
   unstub which
@@ -28,20 +28,21 @@ export WHICH_STUB_DEBUG=/dev/tty
   unstub docker
 }
 
+
 @test "builds an image with multiple tags set" {
   export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0="foo/bar:baz1"
   export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_1="foo/bar:baz2"
   export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_2="foo/bar:baz3"
 
   stub which 'docker : echo /usr/bin/docker'
-  stub buildkite-agent 'annotate --style success "Docker build successful<br />" --context publish --append : echo pushed buildkite agent message'
+  stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
   stub docker "build --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_1 --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_2 -f Dockerfile . : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
   assert_success
   assert_output --partial "basic parameters set"
-  assert_output --partial "Docker build successful"
+  assert_output --partial "Docker build succeeded"
   assert_output --partial "pushed buildkite agent message"
 
   unstub which
@@ -54,14 +55,14 @@ export WHICH_STUB_DEBUG=/dev/tty
   export BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_0="label1=meow1"
 
   stub which 'docker : echo /usr/bin/docker'
-  stub buildkite-agent 'annotate --style success "Docker build successful<br />" --context publish --append : echo pushed buildkite agent message'
+  stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
   stub docker "build --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 --label $BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_0 -f Dockerfile . : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
   assert_success
   assert_output --partial "basic parameters set"
-  assert_output --partial "Docker build successful"
+  assert_output --partial "Docker build succeeded"
   assert_output --partial "pushed buildkite agent message"
 
   unstub which
@@ -76,14 +77,14 @@ export WHICH_STUB_DEBUG=/dev/tty
   export BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_2="label3=value3"
 
   stub which 'docker : echo /usr/bin/docker'
-  stub buildkite-agent 'annotate --style success "Docker build successful<br />" --context publish --append : echo pushed buildkite agent message'
+  stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
   stub docker "build --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 --label $BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_0 --label $BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_1 --label $BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_2 -f Dockerfile . : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
   assert_success
   assert_output --partial "basic parameters set"
-  assert_output --partial "Docker build successful"
+  assert_output --partial "Docker build succeeded"
   assert_output --partial "pushed buildkite agent message"
 
   unstub which
@@ -96,14 +97,14 @@ export WHICH_STUB_DEBUG=/dev/tty
   export BUILDKITE_PLUGIN_DOCKER_BUILD_DOCKERFILE="foo/Dockerfile"
 
   stub which 'docker : echo /usr/bin/docker'
-  stub buildkite-agent 'annotate --style success "Docker build successful<br />" --context publish --append : echo pushed buildkite agent message'
+  stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
   stub docker "build --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 -f $BUILDKITE_PLUGIN_DOCKER_BUILD_DOCKERFILE . : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
   assert_success
   assert_output --partial "basic parameters set"
-  assert_output --partial "Docker build successful"
+  assert_output --partial "Docker build succeeded"
   assert_output --partial "pushed buildkite agent message"
 
   unstub which
@@ -116,14 +117,14 @@ export WHICH_STUB_DEBUG=/dev/tty
   export BUILDKITE_PLUGIN_DOCKER_BUILD_CONTEXT="my/custom/path"
 
   stub which 'docker : echo /usr/bin/docker'
-  stub buildkite-agent 'annotate --style success "Docker build successful<br />" --context publish --append : echo pushed buildkite agent message'
+  stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
   stub docker "build --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 -f Dockerfile $BUILDKITE_PLUGIN_DOCKER_BUILD_CONTEXT : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
   assert_success
   assert_output --partial "basic parameters set"
-  assert_output --partial "Docker build successful"
+  assert_output --partial "Docker build succeeded"
   assert_output --partial "pushed buildkite agent message"
 
   unstub which
@@ -138,14 +139,14 @@ export WHICH_STUB_DEBUG=/dev/tty
   echo "$_TAGS_0" >> "$DOCKER_METADATA_DIR/tags"
 
   stub which 'docker : echo /usr/bin/docker'
-  stub buildkite-agent 'annotate --style success "Docker build successful<br />" --context publish --append : echo pushed buildkite agent message'
+  stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
   stub docker "build --tag $_TAGS_0 -f Dockerfile . : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
   assert_success
   assert_output --partial "basic parameters set"
-  assert_output --partial "Docker build successful"
+  assert_output --partial "Docker build succeeded"
   assert_output --partial "pushed buildkite agent message"
 
   unstub which
@@ -166,14 +167,14 @@ export WHICH_STUB_DEBUG=/dev/tty
   echo "$_TAGS_2" >> "$DOCKER_METADATA_DIR/tags"
 
   stub which 'docker : echo /usr/bin/docker'
-  stub buildkite-agent 'annotate --style success "Docker build successful<br />" --context publish --append : echo pushed buildkite agent message'
+  stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
   stub docker "build --tag $_TAGS_0 --tag $_TAGS_1 --tag $_TAGS_2 -f Dockerfile . : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
   assert_success
   assert_output --partial "basic parameters set"
-  assert_output --partial "Docker build successful"
+  assert_output --partial "Docker build succeeded"
   assert_output --partial "pushed buildkite agent message"
 
   unstub which
@@ -194,14 +195,14 @@ export WHICH_STUB_DEBUG=/dev/tty
   echo "$_LABELS_0" >> "$DOCKER_METADATA_DIR/labels"
 
   stub which 'docker : echo /usr/bin/docker'
-  stub buildkite-agent 'annotate --style success "Docker build successful<br />" --context publish --append : echo pushed buildkite agent message'
+  stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
   stub docker "build --tag $_TAGS_0 --label $_LABELS_0 -f Dockerfile . : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
   assert_success
   assert_output --partial "basic parameters set"
-  assert_output --partial "Docker build successful"
+  assert_output --partial "Docker build succeeded"
   assert_output --partial "pushed buildkite agent message"
 
   unstub which
@@ -224,14 +225,14 @@ export WHICH_STUB_DEBUG=/dev/tty
   echo "$_LABELS_2" >> "$DOCKER_METADATA_DIR/labels"
 
   stub which 'docker : echo /usr/bin/docker'
-  stub buildkite-agent 'annotate --style success "Docker build successful<br />" --context publish --append : echo pushed buildkite agent message'
+  stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
   stub docker "build --tag $_TAGS_0 --label $_LABELS_0 --label $_LABELS_1 --label $_LABELS_2 -f Dockerfile . : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
   assert_success
   assert_output --partial "basic parameters set"
-  assert_output --partial "Docker build successful"
+  assert_output --partial "Docker build succeeded"
   assert_output --partial "pushed buildkite agent message"
 
   unstub which
@@ -264,14 +265,14 @@ export WHICH_STUB_DEBUG=/dev/tty
   export BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_1="label5=value5"
 
   stub which 'docker : echo /usr/bin/docker'
-  stub buildkite-agent 'annotate --style success "Docker build successful<br />" --context publish --append : echo pushed buildkite agent message'
+  stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
   stub docker "build --tag $_TAGS_0 --tag $_TAGS_1 --tag $_TAGS_2 --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_1 --label $_LABELS_0 --label $_LABELS_1 --label $_LABELS_2 --label $BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_0 --label $BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_1 -f Dockerfile . : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
   assert_success
   assert_output --partial "basic parameters set"
-  assert_output --partial "Docker build successful"
+  assert_output --partial "Docker build succeeded"
   assert_output --partial "pushed buildkite agent message"
 
   unstub which
@@ -311,8 +312,8 @@ export WHICH_STUB_DEBUG=/dev/tty
   export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0="foo/bar:baz"
 
   stub which 'docker : echo /usr/bin/docker'
-  stub buildkite-agent 'annotate --style success "Docker build successful<br />" --context publish --append : echo pushed buildkite agent message' \
-    "annotate --style success 'Docker push successful for tag \`foo/bar:baz\`<br />' --context publish --append : echo pushed buildkite agent message for push"
+  stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message' \
+    "annotate --style success 'Docker push succeeded for tag \`foo/bar:baz\`<br />' --context publish --append : echo pushed buildkite agent message for push"
   stub docker 'build --tag foo/bar:baz -f Dockerfile . : echo basic parameters set' \
     'push foo/bar:baz : echo pushed image'
 
@@ -320,7 +321,7 @@ export WHICH_STUB_DEBUG=/dev/tty
 
   assert_success
   assert_output --partial "basic parameters set"
-  assert_output --partial "Docker build successful"
+  assert_output --partial "Docker build succeeded"
   assert_output --partial "pushed buildkite agent message"
   assert_output --partial "pushed image"
   assert_output --partial "pushed buildkite agent message for push"
@@ -337,10 +338,10 @@ export WHICH_STUB_DEBUG=/dev/tty
   export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_2="foo/bar:baz3"
 
   stub which 'docker : echo /usr/bin/docker'
-  stub buildkite-agent 'annotate --style success "Docker build successful<br />" --context publish --append : echo pushed buildkite agent message' \
-    "annotate --style success 'Docker push successful for tag \`foo/bar:baz1\`<br />' --context publish --append : echo pushed buildkite agent message for push 1" \
-    "annotate --style success 'Docker push successful for tag \`foo/bar:baz2\`<br />' --context publish --append : echo pushed buildkite agent message for push 2" \
-    "annotate --style success 'Docker push successful for tag \`foo/bar:baz3\`<br />' --context publish --append : echo pushed buildkite agent message for push 3"
+  stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message' \
+    "annotate --style success 'Docker push succeeded for tag \`foo/bar:baz1\`<br />' --context publish --append : echo pushed buildkite agent message for push 1" \
+    "annotate --style success 'Docker push succeeded for tag \`foo/bar:baz2\`<br />' --context publish --append : echo pushed buildkite agent message for push 2" \
+    "annotate --style success 'Docker push succeeded for tag \`foo/bar:baz3\`<br />' --context publish --append : echo pushed buildkite agent message for push 3"
   stub docker "build --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_1 --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_2 -f Dockerfile . : echo basic parameters set" \
     'push foo/bar:baz1 : echo pushed image 1' \
     'push foo/bar:baz2 : echo pushed image 2' \
@@ -350,7 +351,7 @@ export WHICH_STUB_DEBUG=/dev/tty
 
   assert_success
   assert_output --partial "basic parameters set"
-  assert_output --partial "Docker build successful"
+  assert_output --partial "Docker build succeeded"
   assert_output --partial "pushed buildkite agent message"
   assert_output --partial "pushed image 1"
   assert_output --partial "pushed image 2"
@@ -370,14 +371,14 @@ export WHICH_STUB_DEBUG=/dev/tty
   export BUILDKITE_PLUGIN_DOCKER_BUILD_BUILD_ARGS_1="baz=qux"
 
   stub which 'docker : echo /usr/bin/docker'
-  stub buildkite-agent 'annotate --style success "Docker build successful<br />" --context publish --append : echo pushed buildkite agent message'
+  stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
   stub docker 'build --tag foo/bar:baz --build-arg foo=bar --build-arg baz=qux -f Dockerfile . : echo basic parameters set'
 
   run "$PWD/hooks/post-command"
 
   assert_success
   assert_output --partial "basic parameters set"
-  assert_output --partial "Docker build successful"
+  assert_output --partial "Docker build succeeded"
   assert_output --partial "pushed buildkite agent message"
 
   unstub which
@@ -392,8 +393,8 @@ export WHICH_STUB_DEBUG=/dev/tty
 
 
   stub which 'docker : echo /usr/bin/docker'
-  stub buildkite-agent 'annotate --style success "Docker build successful<br />" --context publish --append : echo pushed buildkite agent message' \
-    "annotate --style success 'Docker push successful for tag \`foo/bar:baz1\`<br />' --context publish --append : echo pushed buildkite agent message for push 1"
+  stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message' \
+    "annotate --style success 'Docker push succeeded for tag \`foo/bar:baz1\`<br />' --context publish --append : echo pushed buildkite agent message for push 1"
   stub docker "build --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 --secret $BUILDKITE_PLUGIN_DOCKER_BUILD_SECRET_FILE -f Dockerfile . : echo basic parameters set" \
     'push foo/bar:baz1 : echo pushed image 1'
 
@@ -401,7 +402,7 @@ export WHICH_STUB_DEBUG=/dev/tty
 
   assert_success
   assert_output --partial "basic parameters set"
-  assert_output --partial "Docker build successful"
+  assert_output --partial "Docker build succeeded"
   assert_output --partial "pushed buildkite agent message"
   assert_output --partial "pushed image 1"
   assert_output --partial "pushed buildkite agent message for push 1"

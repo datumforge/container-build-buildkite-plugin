@@ -21,7 +21,7 @@ The default settings will:
 
 1. Build a container with the `[]tags` in the pipeline step
 1. Use the `.` directory as the context path
-1. Use Dockerfile as the specificed file name to build from
+1. Use Dockerfile as the specified file name to build from
 
 ## Configuration
 
