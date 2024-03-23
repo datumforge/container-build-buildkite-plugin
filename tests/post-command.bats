@@ -10,7 +10,7 @@ export BUILDKITE_COMMIT="12345"
 # export WHICH_STUB_DEBUG=/dev/tty
 
 @test "builds an image with basic parameters set" {
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0="foo/bar:baz"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0="foo/bar:baz"
 
   stub which 'docker : echo /usr/bin/docker'
   stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
@@ -30,13 +30,13 @@ export BUILDKITE_COMMIT="12345"
 
 
 @test "builds an image with multiple tags set" {
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0="foo/bar:baz1"
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_1="foo/bar:baz2"
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_2="foo/bar:baz3"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0="foo/bar:baz1"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_1="foo/bar:baz2"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_2="foo/bar:baz3"
 
   stub which 'docker : echo /usr/bin/docker'
   stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
-  stub docker "build --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_1 --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_2 -f Dockerfile . : echo basic parameters set"
+  stub docker "build --tag $BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0 --tag $BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_1 --tag $BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_2 -f Dockerfile . : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
@@ -51,12 +51,12 @@ export BUILDKITE_COMMIT="12345"
 }
 
 @test "builds an image with a label set" {
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0="foo/bar:baz1"
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_0="label1=meow1"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0="foo/bar:baz1"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_LABELS_0="label1=meow1"
 
   stub which 'docker : echo /usr/bin/docker'
   stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
-  stub docker "build --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 --label $BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_0 -f Dockerfile . : echo basic parameters set"
+  stub docker "build --tag $BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0 --label $BUILDKITE_PLUGIN_CONTAINER_BUILD_LABELS_0 -f Dockerfile . : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
@@ -71,14 +71,14 @@ export BUILDKITE_COMMIT="12345"
 }
 
 @test "builds an image with multiple labels set" {
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0="foo/bar:baz1"
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_0="label1=meow1"
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_1="label2=value2"
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_2="label3=value3"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0="foo/bar:baz1"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_LABELS_0="label1=meow1"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_LABELS_1="label2=value2"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_LABELS_2="label3=value3"
 
   stub which 'docker : echo /usr/bin/docker'
   stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
-  stub docker "build --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 --label $BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_0 --label $BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_1 --label $BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_2 -f Dockerfile . : echo basic parameters set"
+  stub docker "build --tag $BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0 --label $BUILDKITE_PLUGIN_CONTAINER_BUILD_LABELS_0 --label $BUILDKITE_PLUGIN_CONTAINER_BUILD_LABELS_1 --label $BUILDKITE_PLUGIN_CONTAINER_BUILD_LABELS_2 -f Dockerfile . : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
@@ -93,12 +93,12 @@ export BUILDKITE_COMMIT="12345"
 }
 
 @test "builds an image with a custom Dockerfile" {
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0="foo/bar:baz"
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_DOCKERFILE="foo/Dockerfile"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0="foo/bar:baz"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_DOCKERFILE="foo/Dockerfile"
 
   stub which 'docker : echo /usr/bin/docker'
   stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
-  stub docker "build --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 -f $BUILDKITE_PLUGIN_DOCKER_BUILD_DOCKERFILE . : echo basic parameters set"
+  stub docker "build --tag $BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0 -f $BUILDKITE_PLUGIN_CONTAINER_BUILD_DOCKERFILE . : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
@@ -113,12 +113,12 @@ export BUILDKITE_COMMIT="12345"
 }
 
 @test "builds an image with a context path" {
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0="foo/bar:baz"
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_CONTEXT="my/custom/path"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0="foo/bar:baz"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_CONTEXT="my/custom/path"
 
   stub which 'docker : echo /usr/bin/docker'
   stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
-  stub docker "build --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 -f Dockerfile $BUILDKITE_PLUGIN_DOCKER_BUILD_CONTEXT : echo basic parameters set"
+  stub docker "build --tag $BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0 -f Dockerfile $BUILDKITE_PLUGIN_CONTAINER_BUILD_CONTEXT : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
@@ -250,8 +250,8 @@ export BUILDKITE_COMMIT="12345"
   _TAGS_2="foo/bar:baz3"
   echo "$_TAGS_2" >> "$DOCKER_METADATA_DIR/tags"
 
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0="foo/bar:baz4"
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_1="foo/bar:baz4"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0="foo/bar:baz4"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_1="foo/bar:baz4"
 
   touch "$DOCKER_METADATA_DIR/labels"
   _LABELS_0="label1=meow1"
@@ -261,12 +261,12 @@ export BUILDKITE_COMMIT="12345"
   _LABELS_2="label3=value3"
   echo "$_LABELS_2" >> "$DOCKER_METADATA_DIR/labels"
 
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_0="label4=value4"
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_1="label5=value5"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_LABELS_0="label4=value4"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_LABELS_1="label5=value5"
 
   stub which 'docker : echo /usr/bin/docker'
   stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
-  stub docker "build --tag $_TAGS_0 --tag $_TAGS_1 --tag $_TAGS_2 --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_1 --label $_LABELS_0 --label $_LABELS_1 --label $_LABELS_2 --label $BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_0 --label $BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS_1 -f Dockerfile . : echo basic parameters set"
+  stub docker "build --tag $_TAGS_0 --tag $_TAGS_1 --tag $_TAGS_2 --tag $BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0 --tag $BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_1 --label $_LABELS_0 --label $_LABELS_1 --label $_LABELS_2 --label $BUILDKITE_PLUGIN_CONTAINER_BUILD_LABELS_0 --label $BUILDKITE_PLUGIN_CONTAINER_BUILD_LABELS_1 -f Dockerfile . : echo basic parameters set"
 
   run "$PWD/hooks/post-command"
 
@@ -308,8 +308,8 @@ export BUILDKITE_COMMIT="12345"
 }
 
 @test "pushes an image with basic parameters set" {
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_PUSH=true
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0="foo/bar:baz"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_PUSH=true
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0="foo/bar:baz"
 
   stub which 'docker : echo /usr/bin/docker'
   stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message' \
@@ -332,17 +332,17 @@ export BUILDKITE_COMMIT="12345"
 }
 
 @test "pushes an image with multiple tags set" {
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_PUSH=true
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0="foo/bar:baz1"
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_1="foo/bar:baz2"
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_2="foo/bar:baz3"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_PUSH=true
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0="foo/bar:baz1"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_1="foo/bar:baz2"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_2="foo/bar:baz3"
 
   stub which 'docker : echo /usr/bin/docker'
   stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message' \
     "annotate --style success 'Docker push succeeded for tag \`foo/bar:baz1\`<br />' --context publish --append : echo pushed buildkite agent message for push 1" \
     "annotate --style success 'Docker push succeeded for tag \`foo/bar:baz2\`<br />' --context publish --append : echo pushed buildkite agent message for push 2" \
     "annotate --style success 'Docker push succeeded for tag \`foo/bar:baz3\`<br />' --context publish --append : echo pushed buildkite agent message for push 3"
-  stub docker "build --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_1 --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_2 -f Dockerfile . : echo basic parameters set" \
+  stub docker "build --tag $BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0 --tag $BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_1 --tag $BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_2 -f Dockerfile . : echo basic parameters set" \
     'push foo/bar:baz1 : echo pushed image 1' \
     'push foo/bar:baz2 : echo pushed image 2' \
     'push foo/bar:baz3 : echo pushed image 3'
@@ -366,9 +366,9 @@ export BUILDKITE_COMMIT="12345"
 }
 
 @test "builds image with multiple build arguments set" {
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0="foo/bar:baz"
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_BUILD_ARGS_0="foo=bar"
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_BUILD_ARGS_1="baz=qux"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0="foo/bar:baz"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_BUILD_ARGS_0="foo=bar"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_BUILD_ARGS_1="baz=qux"
 
   stub which 'docker : echo /usr/bin/docker'
   stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message'
@@ -387,15 +387,15 @@ export BUILDKITE_COMMIT="12345"
 }
 
 @test "build with secret" {
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_PUSH=true
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0="foo/bar:baz1"
-  export BUILDKITE_PLUGIN_DOCKER_BUILD_SECRET_FILE="id=mysecret,src=secret-file"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_PUSH=true
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0="foo/bar:baz1"
+  export BUILDKITE_PLUGIN_CONTAINER_BUILD_SECRET_FILE="id=mysecret,src=secret-file"
 
 
   stub which 'docker : echo /usr/bin/docker'
   stub buildkite-agent 'annotate --style success "Docker build succeeded<br />" --context publish --append : echo pushed buildkite agent message' \
     "annotate --style success 'Docker push succeeded for tag \`foo/bar:baz1\`<br />' --context publish --append : echo pushed buildkite agent message for push 1"
-  stub docker "build --tag $BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0 --secret $BUILDKITE_PLUGIN_DOCKER_BUILD_SECRET_FILE -f Dockerfile . : echo basic parameters set" \
+  stub docker "build --tag $BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS_0 --secret $BUILDKITE_PLUGIN_CONTAINER_BUILD_SECRET_FILE -f Dockerfile . : echo basic parameters set" \
     'push foo/bar:baz1 : echo pushed image 1'
 
   run "$PWD/hooks/post-command"

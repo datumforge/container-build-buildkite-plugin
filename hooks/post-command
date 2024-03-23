@@ -66,10 +66,10 @@ if ! which docker >/dev/null ; then
   fail_with_message "Docker is not installed. Please install it first."
 fi
 
-dockerfile=${BUILDKITE_PLUGIN_DOCKER_BUILD_DOCKERFILE:-Dockerfile}
-context=${BUILDKITE_PLUGIN_DOCKER_BUILD_CONTEXT:-.}
-push=${BUILDKITE_PLUGIN_DOCKER_BUILD_PUSH:-false}
-secret_file=${BUILDKITE_PLUGIN_DOCKER_BUILD_SECRET_FILE:-}
+dockerfile=${BUILDKITE_PLUGIN_CONTAINER_BUILD_DOCKERFILE:-Dockerfile}
+context=${BUILDKITE_PLUGIN_CONTAINER_BUILD_CONTEXT:-.}
+push=${BUILDKITE_PLUGIN_CONTAINER_BUILD_PUSH:-false}
+secret_file=${BUILDKITE_PLUGIN_CONTAINER_BUILD_SECRET_FILE:-}
 
 tagsflags=()
 
@@ -82,7 +82,7 @@ if docker_metadata_file_exists tags ; then
   fi
 fi
 
-if plugin_read_list_into_result BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS ; then
+if plugin_read_list_into_result BUILDKITE_PLUGIN_CONTAINER_BUILD_TAGS ; then
   for arg in "${result[@]}" ; do
     tagsflags+=("--tag" "${arg}")
   done
@@ -103,7 +103,7 @@ if docker_metadata_file_exists labels ; then
   fi
 fi
 
-if plugin_read_list_into_result BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS ; then
+if plugin_read_list_into_result BUILDKITE_PLUGIN_CONTAINER_BUILD_LABELS ; then
   for arg in "${result[@]}" ; do
     labelsflags+=("--label" "${arg}")
   done
@@ -111,7 +111,7 @@ if plugin_read_list_into_result BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS ; then
 fi
 
 buildargs=()
-if plugin_read_list_into_result BUILDKITE_PLUGIN_DOCKER_BUILD_BUILD_ARGS ; then
+if plugin_read_list_into_result BUILDKITE_PLUGIN_CONTAINER_BUILD_BUILD_ARGS ; then
   for arg in "${result[@]}" ; do
     buildargs+=("--build-arg" "${arg}")
   done
