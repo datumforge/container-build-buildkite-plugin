@@ -2,7 +2,7 @@ services:
   # You need to update this for your plugin name / location
   lint:
     image: buildkite/plugin-linter
-    command: [ '--id', 'datumforge/container-build-buildkite-plugin' ]
+    command: [ '--id', 'datumforge/container-build' ]
     volumes:
       - ".:/plugin:ro"
   tests:
