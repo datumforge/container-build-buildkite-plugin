@@ -6,8 +6,8 @@ export BUILDKITE_REPO="test-org/test-repo"
 export BUILDKITE_COMMIT="12345"
 
 # Uncomment the following line to debug stub failures
-export BUILDKITE_AGENT_STUB_DEBUG=/dev/tty
-export WHICH_STUB_DEBUG=/dev/tty
+# export BUILDKITE_AGENT_STUB_DEBUG=/dev/tty
+# export WHICH_STUB_DEBUG=/dev/tty
 
 @test "builds an image with basic parameters set" {
   export BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS_0="foo/bar:baz"
