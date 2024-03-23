@@ -15,4 +15,4 @@ steps:
   - label: ":sparkles: Lint"
     plugins:
       plugin-linter#v3.3.0:
-        id: a-github-user/template
+        id: datumforge/container-build

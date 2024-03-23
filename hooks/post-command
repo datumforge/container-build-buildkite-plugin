@@ -1,3 +1,176 @@
 #!/bin/bash
 set -euo pipefail
 
+fail_with_message() {
+  message="$1"
+  echo "🚨 $message" >&2
+  buildkite-agent annotate --style error "$message<br />" --context publish --append
+  exit 1
+}
+
+display_success() {
+  message="$1"
+  echo "$message"
+  buildkite-agent annotate --style success "$message<br />" --context publish --append
+}
+
+plugin_read_list_into_result() {
+  result=()
+
+  for prefix in "$@" ; do
+    local i=0
+    local parameter="${prefix}_${i}"
+
+    if [[ -n "${!prefix:-}" ]] ; then
+      fail_with_message "Plugin received a string for $prefix, expected an array"
+    fi
+
+    while [[ -n "${!parameter:-}" ]]; do
+      result+=("${!parameter}")
+      i=$((i+1))
+      parameter="${prefix}_${i}"
+    done
+  done
+
+  [[ ${#result[@]} -gt 0 ]] || return 1
+}
+
+docker_metadata_list_into_result() {
+    # Can be tags or labels
+    field="$1"
+    filepath="$DOCKER_METADATA_DIR/$field"
+
+    if [[ ! -f "$filepath" ]] ; then
+      fail_with_message "No '$field' directory found in $DOCKER_METADATA_DIR"
+    fi
+
+    result=()
+
+    while read -r line ; do
+      result+=("$line")
+    done < "$filepath"
+}
+
+docker_metadata_file_exists() {
+  file=$1
+  if [[ ! -d "${DOCKER_METADATA_DIR:-}" ]] ; then
+    return 1
+  fi
+  if [[ ! -f "$DOCKER_METADATA_DIR/$file" ]] ; then
+    return 1
+  fi
+  return 0
+}
+
+if ! which docker >/dev/null ; then
+  fail_with_message "Docker is not installed. Please install it first."
+fi
+
+dockerfile=${BUILDKITE_PLUGIN_DOCKER_BUILD_DOCKERFILE:-Dockerfile}
+context=${BUILDKITE_PLUGIN_DOCKER_BUILD_CONTEXT:-.}
+push=${BUILDKITE_PLUGIN_DOCKER_BUILD_PUSH:-false}
+secret_file=${BUILDKITE_PLUGIN_DOCKER_BUILD_SECRET_FILE:-}
+
+tagsflags=()
+
+if docker_metadata_file_exists tags ; then
+  if docker_metadata_list_into_result tags ; then
+    for arg in "${result[@]}" ; do
+      tagsflags+=("--tag" "${arg}")
+    done
+    unset result
+  fi
+fi
+
+if plugin_read_list_into_result BUILDKITE_PLUGIN_DOCKER_BUILD_TAGS ; then
+  for arg in "${result[@]}" ; do
+    tagsflags+=("--tag" "${arg}")
+  done
+  unset result
+fi
+
+if [ ${#tagsflags[@]} -eq 0 ]; then
+  fail_with_message "No tags were given either as a parameter or via the docker-metadata-buildkite-plugin"
+fi
+
+labelsflags=()
+if docker_metadata_file_exists labels ; then
+  if docker_metadata_list_into_result labels; then
+    for arg in "${result[@]}" ; do
+      labelsflags+=("--label" "${arg}")
+    done
+    unset result
+  fi
+fi
+
+if plugin_read_list_into_result BUILDKITE_PLUGIN_DOCKER_BUILD_LABELS ; then
+  for arg in "${result[@]}" ; do
+    labelsflags+=("--label" "${arg}")
+  done
+  unset result
+fi
+
+buildargs=()
+if plugin_read_list_into_result BUILDKITE_PLUGIN_DOCKER_BUILD_BUILD_ARGS ; then
+  for arg in "${result[@]}" ; do
+    buildargs+=("--build-arg" "${arg}")
+  done
+  unset result
+fi
+
+
+if [[ -n "$secret_file" ]]; then
+   export DOCKER_BUILDKIT=1
+fi
+
+cmdargs=(
+  "build"
+  "${tagsflags[@]}"
+)
+
+# Labels are optional
+if [ ${#labelsflags[@]} -gt 0 ]; then
+  cmdargs+=("${labelsflags[@]}")
+fi
+
+# Build args are optional
+if [ ${#buildargs[@]} -gt 0 ]; then
+  cmdargs+=("${buildargs[@]}")
+fi
+
+if [[ -n "$secret_file" ]]; then
+  cmdargs+=("--secret" "${secret_file}")
+fi
+
+cmdargs+=(
+  "-f"
+  "${dockerfile}"
+  "${context}"
+)
+set -x
+docker "${cmdargs[@]}"
+status=$?
+set +x
+if [[ $status -eq 0 ]] ; then
+  display_success "Docker build succeeded"
+else
+  fail_with_message "Docker build failed"
+fi
+
+# Push
+######
+
+if [[ "${push}" == "true" ]] ; then
+  for tag in "${tagsflags[@]}" ; do
+    if [[ "${tag}" == "--tag" ]] ; then
+      continue
+    fi
+    docker push "${tag}"
+    status=$?
+    if [[ $status -eq 0 ]] ; then
+      display_success "Docker push succeeded for tag \`${tag}\`"
+    else
+      fail_with_message "Docker push failed for tag \`${tag}\`"
+    fi
+  done
+fi
